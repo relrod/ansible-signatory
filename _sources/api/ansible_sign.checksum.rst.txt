@@ -1,0 +1,29 @@
+ansible\_sign.checksum package
+==============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   ansible_sign.checksum.differ
+
+Submodules
+----------
+
+ansible\_sign.checksum.base module
+----------------------------------
+
+.. automodule:: ansible_sign.checksum.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: ansible_sign.checksum
+   :members:
+   :undoc-members:
+   :show-inheritance:

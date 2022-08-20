@@ -1,0 +1,30 @@
+ansible\_sign package
+=====================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   ansible_sign.checksum
+   ansible_sign.signing
+
+Submodules
+----------
+
+ansible\_sign.cli module
+------------------------
+
+.. automodule:: ansible_sign.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: ansible_sign
+   :members:
+   :undoc-members:
+   :show-inheritance:

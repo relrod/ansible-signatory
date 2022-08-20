@@ -1,0 +1,29 @@
+ansible\_sign.signing.gpg package
+=================================
+
+Submodules
+----------
+
+ansible\_sign.signing.gpg.signer module
+---------------------------------------
+
+.. automodule:: ansible_sign.signing.gpg.signer
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+ansible\_sign.signing.gpg.verifier module
+-----------------------------------------
+
+.. automodule:: ansible_sign.signing.gpg.verifier
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: ansible_sign.signing.gpg
+   :members:
+   :undoc-members:
+   :show-inheritance:

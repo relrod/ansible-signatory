@@ -1,0 +1,29 @@
+ansible\_sign.checksum.differ package
+=====================================
+
+Submodules
+----------
+
+ansible\_sign.checksum.differ.base module
+-----------------------------------------
+
+.. automodule:: ansible_sign.checksum.differ.base
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+ansible\_sign.checksum.differ.distlib\_manifest module
+------------------------------------------------------
+
+.. automodule:: ansible_sign.checksum.differ.distlib_manifest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: ansible_sign.checksum.differ
+   :members:
+   :undoc-members:
+   :show-inheritance:
