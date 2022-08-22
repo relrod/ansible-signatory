@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ansible_sign.checksum.base &#8212; ansible-sign 0.0.post1.dev1+g9327929 documentation</title>
+    <title>ansible_sign.checksum.base &#8212; ansible-sign 0.0.post1.dev1+gb68c6df documentation</title>
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
     <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
@@ -103,15 +103,11 @@
             <span class="c1"># if parsed is False:</span>
             <span class="n">parsed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_gnu_style</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">parsed</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">InvalidChecksumLine</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Unparsable checksum, line </span><span class="si">{</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
+                <span class="k">raise</span> <span class="n">InvalidChecksumLine</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unparsable checksum, line </span><span class="si">{</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">parsed</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">shasum</span> <span class="o">=</span> <span class="n">parsed</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">checksums</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="n">InvalidChecksumLine</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Duplicate path in checksum, line </span><span class="si">{</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
+                <span class="k">raise</span> <span class="n">InvalidChecksumLine</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Duplicate path in checksum, line </span><span class="si">{</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">line</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="n">checksums</span><span class="p">[</span><span class="n">path</span><span class="p">]</span> <span class="o">=</span> <span class="n">shasum</span>
         <span class="k">return</span> <span class="n">checksums</span></div>
 

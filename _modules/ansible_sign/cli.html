@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ansible_sign.cli &#8212; ansible-sign 0.0.post1.dev1+g9327929 documentation</title>
+    <title>ansible_sign.cli &#8212; ansible-sign 0.0.post1.dev1+gb68c6df documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -34,7 +34,6 @@
   <h1>Source code for ansible_sign.cli</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">argparse</span>
 <span class="kn">import</span> <span class="nn">getpass</span>
-<span class="kn">import</span> <span class="nn">gnupg</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
@@ -46,7 +45,7 @@
     <span class="n">InvalidChecksumLine</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="kn">from</span> <span class="nn">ansible_sign.checksum.differ</span> <span class="kn">import</span> <span class="n">DistlibManifestChecksumFileExistenceDiffer</span>
-<span class="kn">from</span> <span class="nn">ansible_sign.signing</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">ansible_sign.signing</span> <span class="kn">import</span> <span class="n">GPGSigner</span><span class="p">,</span> <span class="n">GPGVerifier</span>
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Rick Elrod&quot;</span>
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;(c) 2022 Red Hat, Inc.&quot;</span>
@@ -69,9 +68,7 @@
 <span class="sd">      :obj:`argparse.Namespace`: command line parameters namespace</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Signing and validation for Ansible content&quot;</span>
-    <span class="p">)</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Signing and validation for Ansible content&quot;</span><span class="p">)</span>
     <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--version&quot;</span><span class="p">,</span>
         <span class="n">action</span><span class="o">=</span><span class="s2">&quot;version&quot;</span><span class="p">,</span>
@@ -128,18 +125,12 @@
     <span class="c1"># command: gpg-verify</span>
     <span class="n">cmd_gpg_verify</span> <span class="o">=</span> <span class="n">project_commands</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
         <span class="s2">&quot;gpg-verify&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Perform signature validation AND checksum verification on the &quot;</span>
-            <span class="s2">&quot;checksum manifest&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Perform signature validation AND checksum verification on the checksum manifest&quot;</span><span class="p">),</span>
     <span class="p">)</span>
     <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">gpg_verify</span><span class="p">)</span>
     <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--signature-file&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;An optional detached signature file, relative to the project &quot;</span>
-            <span class="s2">&quot;root. (default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;An optional detached signature file, relative to the project root. (default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;SIGNATURE_FILE&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;signature_file&quot;</span><span class="p">,</span>
@@ -147,10 +138,7 @@
     <span class="p">)</span>
     <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--manifest-file&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;The signed checksum manifest file, relative to the project root.&quot;</span>
-            <span class="s2">&quot;(default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;The signed checksum manifest file, relative to the project root. (default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;MANIFEST_FILE&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;manifest_file&quot;</span><span class="p">,</span>
@@ -158,10 +146,7 @@
     <span class="p">)</span>
     <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--keyring&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;The GPG keyring file to use to find the matching public key. &quot;</span>
-            <span class="s2">&quot;(default: the user&#39;s default keyring)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;The GPG keyring file to use to find the matching public key. (default: the user&#39;s default keyring)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;KEYRING&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;keyring&quot;</span><span class="p">,</span>
@@ -169,10 +154,7 @@
     <span class="p">)</span>
     <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--gnupg-home&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;A valid GNUPG home directory. (default: the GNUPG default, &quot;</span>
-            <span class="s2">&quot;usually ~/.gnupg)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;A valid GNUPG home directory. (default: the GNUPG default, usually ~/.gnupg)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;GNUPG_HOME&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;gnupg_home&quot;</span><span class="p">,</span>
@@ -192,10 +174,7 @@
     <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">gpg_sign</span><span class="p">)</span>
     <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--signature-output&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;An optional filename to which to write the resulting detached &quot;</span>
-            <span class="s2">&quot;signature. (default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;An optional filename to which to write the resulting detached signature. (default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;SIGNATURE&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;signature_output&quot;</span><span class="p">,</span>
@@ -203,10 +182,7 @@
     <span class="p">)</span>
     <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--manifest-output&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;An optional filename to which to write the resulting checksum &quot;</span>
-            <span class="s2">&quot;manifest. (default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;An optional filename to which to write the resulting checksum manifest. (default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;MANIFEST&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;manifest_output&quot;</span><span class="p">,</span>
@@ -214,10 +190,7 @@
     <span class="p">)</span>
     <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--manifest&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;A manifest to use as input instead of generating one. (default: &quot;</span>
-            <span class="s2">&quot;</span><span class="si">%(default)s</span><span class="s2">)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;A manifest to use as input instead of generating one. (default: </span><span class="si">%(default)s</span><span class="s2">)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;MANIFEST_INPUT&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;manifest_input&quot;</span><span class="p">,</span>
@@ -225,10 +198,7 @@
     <span class="p">)</span>
     <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--fingerprint&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;The GPG private key fingerprint to sign with. (default: First &quot;</span>
-            <span class="s2">&quot;usable key in the user&#39;s keyring)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;The GPG private key fingerprint to sign with. (default: First usable key in the user&#39;s keyring)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PRIVATE_KEY&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;fingerprint&quot;</span><span class="p">,</span>
@@ -245,10 +215,7 @@
     <span class="p">)</span>
     <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
         <span class="s2">&quot;--gnupg-home&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;A valid GNUPG home directory. (default: the GNUPG default, &quot;</span>
-            <span class="s2">&quot;usually ~/.gnupg)&quot;</span>
-        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;A valid GNUPG home directory. (default: the GNUPG default, usually ~/.gnupg)&quot;</span><span class="p">),</span>
         <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;GNUPG_HOME&quot;</span><span class="p">,</span>
         <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;gnupg_home&quot;</span><span class="p">,</span>
@@ -289,9 +256,7 @@
 <span class="sd">      loglevel (int): minimum loglevel for emitting messages</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logformat</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(levelname)s</span><span class="s2">:</span><span class="si">%(name)s</span><span class="s2">:</span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
-        <span class="n">level</span><span class="o">=</span><span class="n">loglevel</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">logformat</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
-    <span class="p">)</span></div>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">loglevel</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">logformat</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_generate_checksum_manifest</span><span class="p">(</span><span class="n">project_root</span><span class="p">):</span>
@@ -405,10 +370,7 @@
         <span class="c1"># It was NOT given, so we need to generate it. But we can&#39;t if the user</span>
         <span class="c1"># is trying to pass &quot;-&quot; to _generate_checksum_manifest().</span>
         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">manifest_output</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="s2">&quot;Cannot output checksum manifest to stdout, because then we &quot;</span>
-                <span class="s2">&quot;couldn&#39;t sign it!&quot;</span>
-            <span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cannot output checksum manifest to stdout, because then we couldn&#39;t sign it!&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
         <span class="n">manifest_output</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">manifest_output</span><span class="p">)</span>
@@ -430,7 +392,6 @@
     <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">prompt_passphrase</span><span class="p">:</span>
         <span class="n">passphrase</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="s2">&quot;GPG Key Passphrase: &quot;</span><span class="p">)</span>
 
-    <span class="n">signature_output</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">signature_output</span><span class="p">)</span>
     <span class="n">signer</span> <span class="o">=</span> <span class="n">GPGSigner</span><span class="p">(</span>
         <span class="n">manifest_path</span><span class="o">=</span><span class="n">manifest_path</span><span class="p">,</span>
         <span class="n">output_path</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">signature_output</span><span class="p">,</span>
