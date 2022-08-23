@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ansible_sign.cli &#8212; ansible-sign 0.0.post1.dev1+gfe09cea documentation</title>
+    <title>ansible_sign.cli &#8212; ansible-sign 0.0.post1.dev1+g610e0ff documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -201,13 +201,18 @@
 
 
 <div class="viewcode-block" id="validate_checksum"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.validate_checksum">[docs]</a><span class="k">def</span> <span class="nf">validate_checksum</span><span class="p">(</span><span class="n">project_root</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validate a checksum manifest file. Print a pretty message and return an</span>
+<span class="sd">    appropriate exit code.</span>
+
+<span class="sd">    NOTE that this function does not actually check the path for existence, it</span>
+<span class="sd">    leaves that to the caller (which in nearly all cases would need to do so</span>
+<span class="sd">    anyway). This function will throw FileNotFoundError if the manifest does not</span>
+<span class="sd">    exist.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">differ</span> <span class="o">=</span> <span class="n">DistlibManifestChecksumFileExistenceDiffer</span>
     <span class="n">checksum</span> <span class="o">=</span> <span class="n">ChecksumFile</span><span class="p">(</span><span class="n">project_root</span><span class="p">,</span> <span class="n">differ</span><span class="o">=</span><span class="n">differ</span><span class="p">)</span>
     <span class="n">checksum_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt&quot;</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">checksum_path</span><span class="p">):</span>
-        <span class="n">_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Checksum file does not exist: </span><span class="si">{</span><span class="n">checksum_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
 
     <span class="n">checksum_file_contents</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">checksum_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
