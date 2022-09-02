@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ansible_sign.cli &#8212; ansible-sign 0.0.post1.dev1+g31feb6c documentation</title>
+    <title>ansible_sign.cli &#8212; ansible-sign 0.0.post1.dev1+g0b522a1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -51,312 +51,315 @@
 <span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;(c) 2022 Red Hat, Inc.&quot;</span>
 <span class="n">__license__</span> <span class="o">=</span> <span class="s2">&quot;MIT&quot;</span>
 
-<span class="n">_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
 <span class="c1"># This is relative to the project root passed in by the user at runtime.</span>
 <span class="n">ANSIBLE_SIGN_DIR</span> <span class="o">=</span> <span class="s2">&quot;.ansible-sign&quot;</span>
 
 
-<div class="viewcode-block" id="parse_args"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.parse_args">[docs]</a><span class="k">def</span> <span class="nf">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parse command line parameters</span>
+<div class="viewcode-block" id="AnsibleSignCLI"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.AnsibleSignCLI">[docs]</a><span class="k">class</span> <span class="nc">AnsibleSignCLI</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Parsing args: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">args</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">logformat</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(levelname)s</span><span class="s2">:</span><span class="si">%(name)s</span><span class="s2">:</span><span class="si">%(message)s</span><span class="s2">&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">loglevel</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">logformat</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">      args (List[str]): command line parameters as list of strings</span>
-<span class="sd">          (for example  ``[&quot;--help&quot;]``).</span>
+<div class="viewcode-block" id="AnsibleSignCLI.run_command"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.run_command">[docs]</a>    <span class="k">def</span> <span class="nf">run_command</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        parse_args() will set self.args.func() to the function we wish to</span>
+<span class="sd">        execute, based on the subcommand the user ran. These &#39;action functions&#39;</span>
+<span class="sd">        will return the integer exit code with which we exit at the very end.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">      :obj:`argparse.Namespace`: command line parameters namespace</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        Roughly:</span>
+<span class="sd">        0 = success</span>
+<span class="sd">        1 = error (e.g. file missing, permissions issue, couldn&#39;t parse checksum file, etc.)</span>
+<span class="sd">        2 = checksum verification failed</span>
+<span class="sd">        3 = signature verification failed</span>
+<span class="sd">        4 = signing failed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">func</span><span class="p">()</span></div>
 
-    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Signing and validation for Ansible content&quot;</span><span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--version&quot;</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;version&quot;</span><span class="p">,</span>
-        <span class="n">version</span><span class="o">=</span><span class="s2">&quot;ansible-sign </span><span class="si">{ver}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ver</span><span class="o">=</span><span class="n">__version__</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--debug&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print a bunch of debug info&quot;</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_const&quot;</span><span class="p">,</span>
-        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;loglevel&quot;</span><span class="p">,</span>
-        <span class="n">const</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--nocolor&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Disable color output&quot;</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;nocolor&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">True</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NO_COLOR&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+<div class="viewcode-block" id="AnsibleSignCLI.parse_args"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.parse_args">[docs]</a>    <span class="k">def</span> <span class="nf">parse_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parse command line parameters</span>
 
-    <span class="c1"># Future-proofing for future content types.</span>
-    <span class="n">content_type_parser</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;content_type&quot;</span><span class="p">)</span>
+<span class="sd">        Args:</span>
+<span class="sd">          args (List[str]): command line parameters as list of strings</span>
+<span class="sd">              (for example  ``[&quot;--help&quot;]``).</span>
 
-    <span class="n">project</span> <span class="o">=</span> <span class="n">content_type_parser</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
-        <span class="s2">&quot;project&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Act on an Ansible project directory&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">project_commands</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;command&quot;</span><span class="p">)</span>
+<span class="sd">        Returns:</span>
+<span class="sd">          :obj:`argparse.Namespace`: command line parameters namespace</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-    <span class="c1"># command: gpg-verify</span>
-    <span class="n">cmd_gpg_verify</span> <span class="o">=</span> <span class="n">project_commands</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
-        <span class="s2">&quot;gpg-verify&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Perform signature validation AND checksum verification on the checksum manifest&quot;</span><span class="p">),</span>
-    <span class="p">)</span>
-    <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">gpg_verify</span><span class="p">)</span>
-    <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--keyring&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;The GPG keyring file to use to find the matching public key. (default: the user&#39;s default keyring)&quot;</span><span class="p">),</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;KEYRING&quot;</span><span class="p">,</span>
-        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;keyring&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--gnupg-home&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;A valid GnuPG home directory. (default: the GnuPG default, usually ~/.gnupg)&quot;</span><span class="p">),</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;GNUPG_HOME&quot;</span><span class="p">,</span>
-        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;gnupg_home&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;project_root&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory containing the files being validated and verified&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PROJECT_ROOT&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Signing and validation for Ansible content&quot;</span><span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--version&quot;</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;version&quot;</span><span class="p">,</span>
+            <span class="n">version</span><span class="o">=</span><span class="s2">&quot;ansible-sign </span><span class="si">{ver}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ver</span><span class="o">=</span><span class="n">__version__</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--debug&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Print a bunch of debug info&quot;</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_const&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;loglevel&quot;</span><span class="p">,</span>
+            <span class="n">const</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--nocolor&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Disable color output&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;nocolor&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">True</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;NO_COLOR&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span> <span class="k">else</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="c1"># command: gpg-sign</span>
-    <span class="n">cmd_gpg_sign</span> <span class="o">=</span> <span class="n">project_commands</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
-        <span class="s2">&quot;gpg-sign&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Generate a checksum manifest and GPG sign it&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">gpg_sign</span><span class="p">)</span>
-    <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--fingerprint&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;The GPG private key fingerprint to sign with. (default: First usable key in the user&#39;s keyring)&quot;</span><span class="p">),</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PRIVATE_KEY&quot;</span><span class="p">,</span>
-        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;fingerprint&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;-p&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;--prompt-passphrase&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Prompt for a GPG key passphrase&quot;</span><span class="p">,</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;prompt_passphrase&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;--gnupg-home&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;A valid GnuPG home directory. (default: the GnuPG default, usually ~/.gnupg)&quot;</span><span class="p">),</span>
-        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;GNUPG_HOME&quot;</span><span class="p">,</span>
-        <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;gnupg_home&quot;</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
-        <span class="s2">&quot;project_root&quot;</span><span class="p">,</span>
-        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory containing the files being validated and verified&quot;</span><span class="p">,</span>
-        <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PROJECT_ROOT&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+        <span class="c1"># Future-proofing for future content types.</span>
+        <span class="n">content_type_parser</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;content_type&quot;</span><span class="p">)</span>
 
+        <span class="n">project</span> <span class="o">=</span> <span class="n">content_type_parser</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+            <span class="s2">&quot;project&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Act on an Ansible project directory&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">project_commands</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;command&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="setup_logging"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.setup_logging">[docs]</a><span class="k">def</span> <span class="nf">setup_logging</span><span class="p">(</span><span class="n">loglevel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Setup basic logging</span>
+        <span class="c1"># command: gpg-verify</span>
+        <span class="n">cmd_gpg_verify</span> <span class="o">=</span> <span class="n">project_commands</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+            <span class="s2">&quot;gpg-verify&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Perform signature validation AND checksum verification on the checksum manifest&quot;</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpg_verify</span><span class="p">)</span>
+        <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--keyring&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;The GPG keyring file to use to find the matching public key. (default: the user&#39;s default keyring)&quot;</span><span class="p">),</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;KEYRING&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;keyring&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--gnupg-home&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;A valid GnuPG home directory. (default: the GnuPG default, usually ~/.gnupg)&quot;</span><span class="p">),</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;GNUPG_HOME&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;gnupg_home&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cmd_gpg_verify</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;project_root&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory containing the files being validated and verified&quot;</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PROJECT_ROOT&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
 
-<span class="sd">    Args:</span>
-<span class="sd">      loglevel (int): minimum loglevel for emitting messages</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logformat</span> <span class="o">=</span> <span class="s2">&quot;[</span><span class="si">%(asctime)s</span><span class="s2">] </span><span class="si">%(levelname)s</span><span class="s2">:</span><span class="si">%(name)s</span><span class="s2">:</span><span class="si">%(message)s</span><span class="s2">&quot;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">loglevel</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">logformat</span><span class="p">,</span> <span class="n">datefmt</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">)</span></div>
+        <span class="c1"># command: gpg-sign</span>
+        <span class="n">cmd_gpg_sign</span> <span class="o">=</span> <span class="n">project_commands</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span>
+            <span class="s2">&quot;gpg-sign&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Generate a checksum manifest and GPG sign it&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">gpg_sign</span><span class="p">)</span>
+        <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--fingerprint&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;The GPG private key fingerprint to sign with. (default: First usable key in the user&#39;s keyring)&quot;</span><span class="p">),</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PRIVATE_KEY&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;fingerprint&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;-p&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--prompt-passphrase&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Prompt for a GPG key passphrase&quot;</span><span class="p">,</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;prompt_passphrase&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;--gnupg-home&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;A valid GnuPG home directory. (default: the GnuPG default, usually ~/.gnupg)&quot;</span><span class="p">),</span>
+            <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;GNUPG_HOME&quot;</span><span class="p">,</span>
+            <span class="n">dest</span><span class="o">=</span><span class="s2">&quot;gnupg_home&quot;</span><span class="p">,</span>
+            <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cmd_gpg_sign</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">&quot;project_root&quot;</span><span class="p">,</span>
+            <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The directory containing the files being validated and verified&quot;</span><span class="p">,</span>
+            <span class="n">metavar</span><span class="o">=</span><span class="s2">&quot;PROJECT_ROOT&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
 
+    <span class="k">def</span> <span class="nf">_generate_checksum_manifest</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">differ</span> <span class="o">=</span> <span class="n">DistlibManifestChecksumFileExistenceDiffer</span>
+        <span class="n">checksum</span> <span class="o">=</span> <span class="n">ChecksumFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="n">differ</span><span class="o">=</span><span class="n">differ</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">manifest</span> <span class="o">=</span> <span class="n">checksum</span><span class="o">.</span><span class="n">generate_gnu_style</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/MANIFEST.in&quot;</span><span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not find a MANIFEST.in file in the specified project.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If you are attempting to sign a project, please create this file.&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;See the ansible-sign documentation for more information.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s2">&quot;Full calculated checksum manifest (</span><span class="si">%s</span><span class="s2">):</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span>
+            <span class="n">manifest</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">manifest</span>
 
-<span class="k">def</span> <span class="nf">_generate_checksum_manifest</span><span class="p">(</span><span class="n">project_root</span><span class="p">):</span>
-    <span class="n">differ</span> <span class="o">=</span> <span class="n">DistlibManifestChecksumFileExistenceDiffer</span>
-    <span class="n">checksum</span> <span class="o">=</span> <span class="n">ChecksumFile</span><span class="p">(</span><span class="n">project_root</span><span class="p">,</span> <span class="n">differ</span><span class="o">=</span><span class="n">differ</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">manifest</span> <span class="o">=</span> <span class="n">checksum</span><span class="o">.</span><span class="n">generate_gnu_style</span><span class="p">()</span>
-    <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/MANIFEST.in&quot;</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not find a MANIFEST.in file in the specified project.&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;If you are attempting to sign a project, please create this file.&quot;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;See the ansible-sign documentation for more information.&quot;</span><span class="p">)</span>
-            <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">raise</span> <span class="n">e</span>
-    <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-        <span class="s2">&quot;Full calculated checksum manifest (</span><span class="si">%s</span><span class="s2">):</span><span class="se">\n</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-        <span class="n">project_root</span><span class="p">,</span>
-        <span class="n">manifest</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="n">manifest</span>
+    <span class="k">def</span> <span class="nf">_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[ERROR] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[91mERROR</span><span class="se">\033</span><span class="s2">[0m] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+    <span class="k">def</span> <span class="nf">_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OK   ] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[92mOK   </span><span class="se">\033</span><span class="s2">[0m] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="k">def</span> <span class="nf">_error</span><span class="p">(</span><span class="n">nocolor</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">nocolor</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[ERROR] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[91mERROR</span><span class="se">\033</span><span class="s2">[0m] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_note</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[NOTE ] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[94mNOTE </span><span class="se">\033</span><span class="s2">[0m] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
+<div class="viewcode-block" id="AnsibleSignCLI.validate_checksum"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.validate_checksum">[docs]</a>    <span class="k">def</span> <span class="nf">validate_checksum</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate a checksum manifest file. Print a pretty message and return an</span>
+<span class="sd">        appropriate exit code.</span>
 
-<span class="k">def</span> <span class="nf">_ok</span><span class="p">(</span><span class="n">nocolor</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">nocolor</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OK   ] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[92mOK   </span><span class="se">\033</span><span class="s2">[0m] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">        NOTE that this function does not actually check the path for existence, it</span>
+<span class="sd">        leaves that to the caller (which in nearly all cases would need to do so</span>
+<span class="sd">        anyway). This function will throw FileNotFoundError if the manifest does not</span>
+<span class="sd">        exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">differ</span> <span class="o">=</span> <span class="n">DistlibManifestChecksumFileExistenceDiffer</span>
+        <span class="n">checksum</span> <span class="o">=</span> <span class="n">ChecksumFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="n">differ</span><span class="o">=</span><span class="n">differ</span><span class="p">)</span>
+        <span class="n">checksum_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt&quot;</span><span class="p">)</span>
 
+        <span class="n">checksum_file_contents</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">checksum_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">_note</span><span class="p">(</span><span class="n">nocolor</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">nocolor</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[NOTE ] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[</span><span class="se">\033</span><span class="s2">[94mNOTE </span><span class="se">\033</span><span class="s2">[0m] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="validate_checksum"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.validate_checksum">[docs]</a><span class="k">def</span> <span class="nf">validate_checksum</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Validate a checksum manifest file. Print a pretty message and return an</span>
-<span class="sd">    appropriate exit code.</span>
-
-<span class="sd">    NOTE that this function does not actually check the path for existence, it</span>
-<span class="sd">    leaves that to the caller (which in nearly all cases would need to do so</span>
-<span class="sd">    anyway). This function will throw FileNotFoundError if the manifest does not</span>
-<span class="sd">    exist.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">differ</span> <span class="o">=</span> <span class="n">DistlibManifestChecksumFileExistenceDiffer</span>
-    <span class="n">checksum</span> <span class="o">=</span> <span class="n">ChecksumFile</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="n">differ</span><span class="o">=</span><span class="n">differ</span><span class="p">)</span>
-    <span class="n">checksum_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt&quot;</span><span class="p">)</span>
-
-    <span class="n">checksum_file_contents</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">checksum_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">manifest</span> <span class="o">=</span> <span class="n">checksum</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">checksum_file_contents</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">InvalidChecksumLine</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Invalid line encountered in checksum manifest: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">checksum</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">manifest</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">except</span> <span class="n">ChecksumMismatch</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;Checksum validation failed.&quot;</span><span class="p">)</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
-        <span class="k">return</span> <span class="mi">2</span>
-    <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/MANIFEST.in&quot;</span><span class="p">):</span>
-            <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;Could not find a MANIFEST.in file in the specified project.&quot;</span><span class="p">)</span>
-            <span class="n">_note</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;If you are attempting to verify a signed project, please ensure that the project directory includes this file after signing.&quot;</span><span class="p">)</span>
-            <span class="n">_note</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;See the ansible-sign documentation for more information.&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">manifest</span> <span class="o">=</span> <span class="n">checksum</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">checksum_file_contents</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">InvalidChecksumLine</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid line encountered in checksum manifest: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
-    <span class="n">_ok</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;Checksum validation succeeded.&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="mi">0</span></div>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">checksum</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">manifest</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ChecksumMismatch</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="s2">&quot;Checksum validation failed.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">return</span> <span class="mi">2</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;/MANIFEST.in&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="s2">&quot;Could not find a MANIFEST.in file in the specified project.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_note</span><span class="p">(</span><span class="s2">&quot;If you are attempting to verify a signed project, please ensure that the project directory includes this file after signing.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_note</span><span class="p">(</span><span class="s2">&quot;See the ansible-sign documentation for more information.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ok</span><span class="p">(</span><span class="s2">&quot;Checksum validation succeeded.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="gpg_verify"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.gpg_verify">[docs]</a><span class="k">def</span> <span class="nf">gpg_verify</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="n">signature_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt.sig&quot;</span><span class="p">)</span>
-    <span class="n">manifest_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="AnsibleSignCLI.gpg_verify"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.gpg_verify">[docs]</a>    <span class="k">def</span> <span class="nf">gpg_verify</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">signature_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt.sig&quot;</span><span class="p">)</span>
+        <span class="n">manifest_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">signature_file</span><span class="p">):</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Signature file does not exist: </span><span class="si">{</span><span class="n">signature_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">signature_file</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Signature file does not exist: </span><span class="si">{</span><span class="n">signature_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">manifest_file</span><span class="p">):</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Checksum manifest file does not exist: </span><span class="si">{</span><span class="n">manifest_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">manifest_file</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Checksum manifest file does not exist: </span><span class="si">{</span><span class="n">manifest_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
 
-    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">keyring</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">keyring</span><span class="p">):</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Specified keyring file not found: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">keyring</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">keyring</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">keyring</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Specified keyring file not found: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">keyring</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
 
-    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span><span class="p">):</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Specified GnuPG home is not a directory: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Specified GnuPG home is not a directory: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
 
-    <span class="n">verifier</span> <span class="o">=</span> <span class="n">GPGVerifier</span><span class="p">(</span>
-        <span class="n">manifest_path</span><span class="o">=</span><span class="n">manifest_file</span><span class="p">,</span>
-        <span class="n">detached_signature_path</span><span class="o">=</span><span class="n">signature_file</span><span class="p">,</span>
-        <span class="n">gpg_home</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span><span class="p">,</span>
-        <span class="n">keyring</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">keyring</span><span class="p">,</span>
-    <span class="p">)</span>
+        <span class="n">verifier</span> <span class="o">=</span> <span class="n">GPGVerifier</span><span class="p">(</span>
+            <span class="n">manifest_path</span><span class="o">=</span><span class="n">manifest_file</span><span class="p">,</span>
+            <span class="n">detached_signature_path</span><span class="o">=</span><span class="n">signature_file</span><span class="p">,</span>
+            <span class="n">gpg_home</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span><span class="p">,</span>
+            <span class="n">keyring</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">keyring</span><span class="p">,</span>
+        <span class="p">)</span>
 
-    <span class="n">result</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">verifier</span><span class="o">.</span><span class="n">verify</span><span class="p">()</span>
 
-    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
-        <span class="n">_note</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;Re-run with the global --debug flag for more information.&quot;</span><span class="p">)</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">extra_information</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">3</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_note</span><span class="p">(</span><span class="s2">&quot;Re-run with the global --debug flag for more information.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">extra_information</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">3</span>
 
-    <span class="n">_ok</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ok</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">summary</span><span class="p">)</span>
 
-    <span class="c1"># GPG verification is done and we are still here, so return based on</span>
-    <span class="c1"># checksum validation now.</span>
-    <span class="k">return</span> <span class="n">validate_checksum</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+        <span class="c1"># GPG verification is done and we are still here, so return based on</span>
+        <span class="c1"># checksum validation now.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">validate_checksum</span><span class="p">()</span></div>
 
+    <span class="k">def</span> <span class="nf">_write_file_or_print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">contents</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dest</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
 
-<span class="k">def</span> <span class="nf">_write_file_or_print</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">contents</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">dest</span> <span class="o">==</span> <span class="s2">&quot;-&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">contents</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="n">outdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
 
-    <span class="n">outdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">dest</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">outdir</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating output directory: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">outdir</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">outdir</span><span class="p">):</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating output directory: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">outdir</span><span class="p">)</span>
-        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">outdir</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wrote to file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">contents</span><span class="p">)</span>
-        <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Wrote to file: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+<div class="viewcode-block" id="AnsibleSignCLI.gpg_sign"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.gpg_sign">[docs]</a>    <span class="k">def</span> <span class="nf">gpg_sign</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Step 1: Manifest</span>
+        <span class="n">manifest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt&quot;</span><span class="p">)</span>
+        <span class="n">checksum_file_contents</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_checksum_manifest</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">checksum_file_contents</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_write_file_or_print</span><span class="p">(</span><span class="n">manifest_path</span><span class="p">,</span> <span class="n">checksum_file_contents</span><span class="p">)</span>
 
+        <span class="c1"># Step 2: Signing</span>
+        <span class="c1"># Do they need a passphrase?</span>
+        <span class="n">passphrase</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">prompt_passphrase</span><span class="p">:</span>
+            <span class="n">passphrase</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="s2">&quot;GPG Key Passphrase: &quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="gpg_sign"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.gpg_sign">[docs]</a><span class="k">def</span> <span class="nf">gpg_sign</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="c1"># Step 1: Manifest</span>
-    <span class="n">manifest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt&quot;</span><span class="p">)</span>
-    <span class="n">checksum_file_contents</span> <span class="o">=</span> <span class="n">_generate_checksum_manifest</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">checksum_file_contents</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="k">return</span> <span class="mi">1</span>
-    <span class="n">_write_file_or_print</span><span class="p">(</span><span class="n">manifest_path</span><span class="p">,</span> <span class="n">checksum_file_contents</span><span class="p">)</span>
+        <span class="n">signature_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt.sig&quot;</span><span class="p">)</span>
+        <span class="n">signer</span> <span class="o">=</span> <span class="n">GPGSigner</span><span class="p">(</span>
+            <span class="n">manifest_path</span><span class="o">=</span><span class="n">manifest_path</span><span class="p">,</span>
+            <span class="n">output_path</span><span class="o">=</span><span class="n">signature_path</span><span class="p">,</span>
+            <span class="n">privkey</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">fingerprint</span><span class="p">,</span>
+            <span class="n">passphrase</span><span class="o">=</span><span class="n">passphrase</span><span class="p">,</span>
+            <span class="n">gpg_home</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">signer</span><span class="o">.</span><span class="n">sign</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ok</span><span class="p">(</span><span class="s2">&quot;GPG signing successful!&quot;</span><span class="p">)</span>
+            <span class="n">retcode</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_error</span><span class="p">(</span><span class="s2">&quot;GPG signing FAILED!&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_note</span><span class="p">(</span><span class="s2">&quot;Re-run with the global --debug flag for more information.&quot;</span><span class="p">)</span>
+            <span class="n">retcode</span> <span class="o">=</span> <span class="mi">4</span>
 
-    <span class="c1"># Step 2: Signing</span>
-    <span class="c1"># Do they need a passphrase?</span>
-    <span class="n">passphrase</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">prompt_passphrase</span><span class="p">:</span>
-        <span class="n">passphrase</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getpass</span><span class="p">(</span><span class="s2">&quot;GPG Key Passphrase: &quot;</span><span class="p">)</span>
-
-    <span class="n">signature_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">project_root</span><span class="p">,</span> <span class="s2">&quot;.ansible-sign&quot;</span><span class="p">,</span> <span class="s2">&quot;sha256sum.txt.sig&quot;</span><span class="p">)</span>
-    <span class="n">signer</span> <span class="o">=</span> <span class="n">GPGSigner</span><span class="p">(</span>
-        <span class="n">manifest_path</span><span class="o">=</span><span class="n">manifest_path</span><span class="p">,</span>
-        <span class="n">output_path</span><span class="o">=</span><span class="n">signature_path</span><span class="p">,</span>
-        <span class="n">privkey</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">fingerprint</span><span class="p">,</span>
-        <span class="n">passphrase</span><span class="o">=</span><span class="n">passphrase</span><span class="p">,</span>
-        <span class="n">gpg_home</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">gnupg_home</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">signer</span><span class="o">.</span><span class="n">sign</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">:</span>
-        <span class="n">_ok</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;GPG signing successful!&quot;</span><span class="p">)</span>
-        <span class="n">retcode</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">_error</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;GPG signing FAILED!&quot;</span><span class="p">)</span>
-        <span class="n">_note</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="s2">&quot;Re-run with the global --debug flag for more information.&quot;</span><span class="p">)</span>
-        <span class="n">retcode</span> <span class="o">=</span> <span class="mi">4</span>
-
-    <span class="n">_note</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Checksum manifest: </span><span class="si">{</span><span class="n">manifest_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">_note</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">nocolor</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;GPG summary: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GPG Details: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">extra_information</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">retcode</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_note</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Checksum manifest: </span><span class="si">{</span><span class="n">manifest_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_note</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GPG summary: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">summary</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GPG Details: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">extra_information</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">retcode</span></div></div>
 
 
 <div class="viewcode-block" id="main"><a class="viewcode-back" href="../../api/ansible_sign.html#ansible_sign.cli.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-    <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-    <span class="n">setup_logging</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">loglevel</span><span class="p">)</span>
-    <span class="n">_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Starting crazy calculations...&quot;</span><span class="p">)</span>
-    <span class="n">exitcode</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
-    <span class="n">_logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Script ends here&quot;</span><span class="p">)</span>
+    <span class="n">cli</span> <span class="o">=</span> <span class="n">AnsibleSignCLI</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">cli</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Running requested command/passing to function&quot;</span><span class="p">)</span>
+    <span class="n">exitcode</span> <span class="o">=</span> <span class="n">cli</span><span class="o">.</span><span class="n">run_command</span><span class="p">()</span>
+    <span class="n">cli</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Script ends here, rc=</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exitcode</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">exitcode</span></div>
 
 

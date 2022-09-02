@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>ansible_sign package &#8212; ansible-sign 0.0.post1.dev1+g31feb6c documentation</title>
+    <title>ansible_sign package &#8212; ansible-sign 0.0.post1.dev1+g0b522a1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -78,24 +78,23 @@
 </section>
 <section id="module-ansible_sign.cli">
 <span id="ansible-sign-cli-module"></span><h2>ansible_sign.cli module<a class="headerlink" href="#module-ansible_sign.cli" title="Permalink to this heading">¶</a></h2>
-<dl class="py function">
-<dt class="sig sig-object py" id="ansible_sign.cli.gpg_sign">
-<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">gpg_sign</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#gpg_sign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.gpg_sign" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="ansible_sign.cli.AnsibleSignCLI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">AnsibleSignCLI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#AnsibleSignCLI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.AnsibleSignCLI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3.10/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ansible_sign.cli.AnsibleSignCLI.gpg_sign">
+<span class="sig-name descname"><span class="pre">gpg_sign</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#AnsibleSignCLI.gpg_sign"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.AnsibleSignCLI.gpg_sign" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="ansible_sign.cli.gpg_verify">
-<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">gpg_verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#gpg_verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.gpg_verify" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="ansible_sign.cli.AnsibleSignCLI.gpg_verify">
+<span class="sig-name descname"><span class="pre">gpg_verify</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#AnsibleSignCLI.gpg_verify"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.AnsibleSignCLI.gpg_verify" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="ansible_sign.cli.main">
-<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.main" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ansible_sign.cli.parse_args">
-<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#parse_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.parse_args" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="ansible_sign.cli.AnsibleSignCLI.parse_args">
+<span class="sig-name descname"><span class="pre">parse_args</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#AnsibleSignCLI.parse_args"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.AnsibleSignCLI.parse_args" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse command line parameters</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -111,33 +110,43 @@
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="ansible_sign.cli.run">
-<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.run" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calls <a class="reference internal" href="#ansible_sign.cli.main" title="ansible_sign.cli.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a> passing the CLI arguments extracted from <a class="reference external" href="https://docs.python.org/3.10/library/sys.html#sys.argv" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sys.argv</span></code></a></p>
-<p>This function can be used as entry point to create console scripts with setuptools.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ansible_sign.cli.AnsibleSignCLI.run_command">
+<span class="sig-name descname"><span class="pre">run_command</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#AnsibleSignCLI.run_command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.AnsibleSignCLI.run_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>parse_args() will set self.args.func() to the function we wish to
+execute, based on the subcommand the user ran. These ‘action functions’
+will return the integer exit code with which we exit at the very end.</p>
+<p>Roughly:
+0 = success
+1 = error (e.g. file missing, permissions issue, couldn’t parse checksum file, etc.)
+2 = checksum verification failed
+3 = signature verification failed
+4 = signing failed</p>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="ansible_sign.cli.setup_logging">
-<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loglevel</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#setup_logging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.setup_logging" title="Permalink to this definition">¶</a></dt>
-<dd><p>Setup basic logging</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>loglevel</strong> (<a class="reference external" href="https://docs.python.org/3.10/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – minimum loglevel for emitting messages</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="ansible_sign.cli.validate_checksum">
-<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">validate_checksum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#validate_checksum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.validate_checksum" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="ansible_sign.cli.AnsibleSignCLI.validate_checksum">
+<span class="sig-name descname"><span class="pre">validate_checksum</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#AnsibleSignCLI.validate_checksum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.AnsibleSignCLI.validate_checksum" title="Permalink to this definition">¶</a></dt>
 <dd><p>Validate a checksum manifest file. Print a pretty message and return an
 appropriate exit code.</p>
 <p>NOTE that this function does not actually check the path for existence, it
 leaves that to the caller (which in nearly all cases would need to do so
 anyway). This function will throw FileNotFoundError if the manifest does not
 exist.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ansible_sign.cli.main">
+<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ansible_sign.cli.run">
+<span class="sig-prename descclassname"><span class="pre">ansible_sign.cli.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ansible_sign/cli.html#run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ansible_sign.cli.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <a class="reference internal" href="#ansible_sign.cli.main" title="ansible_sign.cli.main"><code class="xref py py-func docutils literal notranslate"><span class="pre">main()</span></code></a> passing the CLI arguments extracted from <a class="reference external" href="https://docs.python.org/3.10/library/sys.html#sys.argv" title="(in Python v3.10)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sys.argv</span></code></a></p>
+<p>This function can be used as entry point to create console scripts with setuptools.</p>
 </dd></dl>
 
 </section>
