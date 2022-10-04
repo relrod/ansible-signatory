@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>ansible_sign &#8212; ansible-sign 0.0.post1.dev1+gd014073 documentation</title>
+    <title>ansible_sign &#8212; ansible-sign 0.0.post1.dev1+gac3d747 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -55,7 +56,19 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="ansible_sign.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ansible_sign.html#module-ansible_sign.cli">ansible_sign.cli module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ansible_sign.html#module-ansible_sign.cli">ansible_sign.cli module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.html#ansible_sign.cli.AnsibleSignCLI"><code class="docutils literal notranslate"><span class="pre">AnsibleSignCLI</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.gpg_sign"><code class="docutils literal notranslate"><span class="pre">AnsibleSignCLI.gpg_sign()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.gpg_verify"><code class="docutils literal notranslate"><span class="pre">AnsibleSignCLI.gpg_verify()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.parse_args"><code class="docutils literal notranslate"><span class="pre">AnsibleSignCLI.parse_args()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.run_command"><code class="docutils literal notranslate"><span class="pre">AnsibleSignCLI.run_command()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.html#ansible_sign.cli.AnsibleSignCLI.validate_checksum"><code class="docutils literal notranslate"><span class="pre">AnsibleSignCLI.validate_checksum()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.html#ansible_sign.cli.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.html#ansible_sign.cli.run"><code class="docutils literal notranslate"><span class="pre">run()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="ansible_sign.html#module-ansible_sign">Module contents</a></li>
 </ul>
 </li>
@@ -120,7 +133,7 @@
       &copy;2022, Red Hat, Inc..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.2.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

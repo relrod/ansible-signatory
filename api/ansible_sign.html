@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>ansible_sign package &#8212; ansible-sign 0.0.post1.dev1+gd014073 documentation</title>
+    <title>ansible_sign package &#8212; ansible-sign 0.0.post1.dev1+gac3d747 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -50,7 +51,23 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="ansible_sign.checksum.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ansible_sign.checksum.html#module-ansible_sign.checksum.base">ansible_sign.checksum.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ansible_sign.checksum.html#module-ansible_sign.checksum.base">ansible_sign.checksum.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile"><code class="docutils literal notranslate"><span class="pre">ChecksumFile</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile.calculate_checksum"><code class="docutils literal notranslate"><span class="pre">ChecksumFile.calculate_checksum()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile.calculate_checksums_from_root"><code class="docutils literal notranslate"><span class="pre">ChecksumFile.calculate_checksums_from_root()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile.diff"><code class="docutils literal notranslate"><span class="pre">ChecksumFile.diff()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile.differ_warnings"><code class="docutils literal notranslate"><span class="pre">ChecksumFile.differ_warnings</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile.generate_gnu_style"><code class="docutils literal notranslate"><span class="pre">ChecksumFile.generate_gnu_style()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile.parse"><code class="docutils literal notranslate"><span class="pre">ChecksumFile.parse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile.verify"><code class="docutils literal notranslate"><span class="pre">ChecksumFile.verify()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumFile.warnings"><code class="docutils literal notranslate"><span class="pre">ChecksumFile.warnings</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.ChecksumMismatch"><code class="docutils literal notranslate"><span class="pre">ChecksumMismatch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.InvalidChecksumLine"><code class="docutils literal notranslate"><span class="pre">InvalidChecksumLine</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.checksum.html#ansible_sign.checksum.base.NoDifferException"><code class="docutils literal notranslate"><span class="pre">NoDifferException</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="ansible_sign.checksum.html#module-ansible_sign.checksum">Module contents</a></li>
 </ul>
 </li>
@@ -66,7 +83,19 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.html#module-ansible_sign.signing.base">ansible_sign.signing.base module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.html#module-ansible_sign.signing.base">ansible_sign.signing.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.signing.html#ansible_sign.signing.base.SignatureSigner"><code class="docutils literal notranslate"><span class="pre">SignatureSigner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.signing.html#ansible_sign.signing.base.SignatureSigner.sign"><code class="docutils literal notranslate"><span class="pre">SignatureSigner.sign()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.signing.html#ansible_sign.signing.base.SignatureSigningResult"><code class="docutils literal notranslate"><span class="pre">SignatureSigningResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.signing.html#ansible_sign.signing.base.SignatureVerificationResult"><code class="docutils literal notranslate"><span class="pre">SignatureVerificationResult</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.signing.html#ansible_sign.signing.base.SignatureVerifier"><code class="docutils literal notranslate"><span class="pre">SignatureVerifier</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.signing.html#ansible_sign.signing.base.SignatureVerifier.verify"><code class="docutils literal notranslate"><span class="pre">SignatureVerifier.verify()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.html#module-ansible_sign.signing">Module contents</a></li>
 </ul>
 </li>
@@ -212,7 +241,7 @@ exist.</p>
       &copy;2022, Red Hat, Inc..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.2.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

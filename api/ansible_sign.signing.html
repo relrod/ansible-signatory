@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>ansible_sign.signing package &#8212; ansible-sign 0.0.post1.dev1+gd014073 documentation</title>
+    <title>ansible_sign.signing package &#8212; ansible-sign 0.0.post1.dev1+gac3d747 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
@@ -14,6 +14,7 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
    
@@ -40,8 +41,20 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="ansible_sign.signing.gpg.html">ansible_sign.signing.gpg package</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.gpg.html#submodules">Submodules</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.gpg.html#module-ansible_sign.signing.gpg.signer">ansible_sign.signing.gpg.signer module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.gpg.html#module-ansible_sign.signing.gpg.verifier">ansible_sign.signing.gpg.verifier module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.gpg.html#module-ansible_sign.signing.gpg.signer">ansible_sign.signing.gpg.signer module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.signing.gpg.html#ansible_sign.signing.gpg.signer.GPGSigner"><code class="docutils literal notranslate"><span class="pre">GPGSigner</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.signing.gpg.html#ansible_sign.signing.gpg.signer.GPGSigner.sign"><code class="docutils literal notranslate"><span class="pre">GPGSigner.sign()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.gpg.html#module-ansible_sign.signing.gpg.verifier">ansible_sign.signing.gpg.verifier module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="ansible_sign.signing.gpg.html#ansible_sign.signing.gpg.verifier.GPGVerifier"><code class="docutils literal notranslate"><span class="pre">GPGVerifier</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="ansible_sign.signing.gpg.html#ansible_sign.signing.gpg.verifier.GPGVerifier.verify"><code class="docutils literal notranslate"><span class="pre">GPGVerifier.verify()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="ansible_sign.signing.gpg.html#module-ansible_sign.signing.gpg">Module contents</a></li>
 </ul>
 </li>
@@ -168,7 +181,7 @@ leaving it to each subclass to implement sign() as it sees fit.</p></li>
       &copy;2022, Red Hat, Inc..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.2.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
