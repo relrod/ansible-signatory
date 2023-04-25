@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Rundown of ansible-sign (CLI) usage &mdash; Ansible Sign Documentation</title>
@@ -14,9 +14,6 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
@@ -44,7 +41,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> ansible-sign
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            ansible-sign
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -85,7 +86,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Rundown of <code class="docutils literal notranslate"><span class="pre">ansible-sign</span></code> (CLI) usage</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/rundown.rst.txt" rel="nofollow"> View page source</a>
@@ -116,7 +117,7 @@ your default GnuPG keyring.</p>
 <p>You can verify that you have a keypair with the following command:</p>
 <div class="literal-block-wrapper docutils container" id="id1">
 <div class="code-block-caption"><span class="caption-text">Verifying that a valid secret GPG key exists for signing content</span><a class="headerlink" href="#id1" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ gpg --list-secret-keys
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>gpg<span class="w"> </span>--list-secret-keys
 </pre></div>
 </div>
 </div>
@@ -129,8 +130,8 @@ and are ready to move on to
 <section id="adding-a-gpg-key-to-awx-or-ansible-automation-controller">
 <h2>Adding a GPG key to AWX or Ansible Automation Controller<a class="headerlink" href="#adding-a-gpg-key-to-awx-or-ansible-automation-controller" title="Permalink to this heading"></a></h2>
 <p>In the command line, run the following commands:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ gpg --list-keys
-$ gpg --export --armour &lt;key fingerprint&gt; &gt; my_public_key.asc
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>gpg<span class="w"> </span>--list-keys
+$<span class="w"> </span>gpg<span class="w"> </span>--export<span class="w"> </span>--armour<span class="w"> </span>&lt;key<span class="w"> </span>fingerprint&gt;<span class="w"> </span>&gt;<span class="w"> </span>my_public_key.asc
 </pre></div>
 </div>
 <ol class="arabic simple">
@@ -149,21 +150,21 @@ For more information regarding generating a GPG keypair, visit the <a class="ref
 <p>Run the following command to install <code class="docutils literal notranslate"><span class="pre">ansible-sign</span></code>:</p>
 <div class="literal-block-wrapper docutils container" id="id2">
 <div class="code-block-caption"><span class="caption-text">Installing <code class="docutils literal notranslate"><span class="pre">ansible-sign</span></code></span><a class="headerlink" href="#id2" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ pip install ansible-sign
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>ansible-sign
 </pre></div>
 </div>
 </div>
 <p>Once it’s installed, run:</p>
 <div class="literal-block-wrapper docutils container" id="id3">
 <div class="code-block-caption"><span class="caption-text">Verify that <code class="docutils literal notranslate"><span class="pre">ansible-sign</span></code> was successfully installed.</span><a class="headerlink" href="#id3" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ ansible-sign --version
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible-sign<span class="w"> </span>--version
 </pre></div>
 </div>
 </div>
 <p>You should see output similar to the following (possibly with a different version number):</p>
 <div class="literal-block-wrapper docutils container" id="id4">
 <div class="code-block-caption"><span class="caption-text">The output of <code class="docutils literal notranslate"><span class="pre">ansible-sign</span> <span class="pre">--version</span></code></span><a class="headerlink" href="#id4" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible-sign <span class="m">0</span>.1
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>ansible-sign<span class="w"> </span><span class="m">0</span>.1
 </pre></div>
 </div>
 </div>
@@ -178,15 +179,15 @@ structures.</p>
 and two small playbooks under a <code class="docutils literal notranslate"><span class="pre">playbooks</span></code> directory.</p>
 <div class="literal-block-wrapper docutils container" id="id5">
 <div class="code-block-caption"><span class="caption-text">Our sample project</span><a class="headerlink" href="#id5" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> sample-project/
-$ tree -a .
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>sample-project/
+$<span class="w"> </span>tree<span class="w"> </span>-a<span class="w"> </span>.
 .
-├── inventory
-└── playbooks
-    ├── get_uptime.yml
-    └── hello.yml
+├──<span class="w"> </span>inventory
+└──<span class="w"> </span>playbooks
+<span class="w">    </span>├──<span class="w"> </span>get_uptime.yml
+<span class="w">    </span>└──<span class="w"> </span>hello.yml
 
-<span class="m">1</span> directory, <span class="m">3</span> files
+<span class="m">1</span><span class="w"> </span>directory,<span class="w"> </span><span class="m">3</span><span class="w"> </span>files
 </pre></div>
 </div>
 </div>
@@ -257,16 +258,16 @@ new <code class="docutils literal notranslate"><span class="pre">.ansible-sign</
 checksum manifest and a detached GPG signature for it.</p>
 <div class="literal-block-wrapper docutils container" id="id8">
 <div class="code-block-caption"><span class="caption-text">Our sample project after signing</span><a class="headerlink" href="#id8" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ tree -a .
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>tree<span class="w"> </span>-a<span class="w"> </span>.
 .
-├── .ansible-sign
-│   ├── sha256sum.txt
-│   └── sha256sum.txt.sig
-├── inventory
-├── MANIFEST.in
-└── playbooks
-    ├── get_uptime.yml
-    └── hello.yml
+├──<span class="w"> </span>.ansible-sign
+│<span class="w">   </span>├──<span class="w"> </span>sha256sum.txt
+│<span class="w">   </span>└──<span class="w"> </span>sha256sum.txt.sig
+├──<span class="w"> </span>inventory
+├──<span class="w"> </span>MANIFEST.in
+└──<span class="w"> </span>playbooks
+<span class="w">    </span>├──<span class="w"> </span>get_uptime.yml
+<span class="w">    </span>└──<span class="w"> </span>hello.yml
 </pre></div>
 </div>
 </div>
@@ -281,9 +282,9 @@ manifest says they should be. In particular, the <code class="docutils literal n
 conditions.</p>
 <div class="literal-block-wrapper docutils container" id="id9">
 <div class="code-block-caption"><span class="caption-text">Verifying our sample project</span><a class="headerlink" href="#id9" title="Permalink to this code"></a></div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ ansible-sign project gpg-verify .
-<span class="o">[</span>OK   <span class="o">]</span> GPG signature verification succeeded.
-<span class="o">[</span>OK   <span class="o">]</span> Checksum validation succeeded.
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>ansible-sign<span class="w"> </span>project<span class="w"> </span>gpg-verify<span class="w"> </span>.
+<span class="o">[</span>OK<span class="w">   </span><span class="o">]</span><span class="w"> </span>GPG<span class="w"> </span>signature<span class="w"> </span>verification<span class="w"> </span>succeeded.
+<span class="o">[</span>OK<span class="w">   </span><span class="o">]</span><span class="w"> </span>Checksum<span class="w"> </span>validation<span class="w"> </span>succeeded.
 </pre></div>
 </div>
 </div>
@@ -315,7 +316,7 @@ based on the failure (for example, sending alerts for some errors but silently
 failing for others).</p>
 <p>These codes are used fairly consistently within the code, and can be considered
 stable:</p>
-<table class="colwidths-given docutils align-default" id="id10">
+<table class="docutils align-default" id="id10">
 <caption><span class="caption-text">Status codes that <code class="docutils literal notranslate"><span class="pre">ansible-sign</span></code> can exit with</span><a class="headerlink" href="#id10" title="Permalink to this table"></a></caption>
 <colgroup>
 <col style="width: 15%" />
