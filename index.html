@@ -1,167 +1,209 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html>
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ansible-sign &mdash; Ansible Sign Documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/ansible.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/rtd-ethical-ads.css" type="text/css" />
-    <link rel="shortcut icon" href="_static/images/Ansible-Mark-RGB_Black.png"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-    <script src="_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="License" href="license.html" /><!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
-
-
-
-
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Coverage report</title>
+    <link rel="icon" sizes="32x32" href="favicon_32.png">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <script type="text/javascript" src="coverage_html.js" defer></script>
 </head>
-
-<body class="wy-body-for-nav"><!-- extra body elements for Ansible beyond RTD Sphinx Theme -->
-
-
-
-<a class="DocSite-nav" href="https://ansible.github.io/ansible-sign/" style="padding-bottom: 30px;">
-
-  <img class="DocSiteNav-logo"
-    src="_static/images/Ansible-Mark-RGB_White.png"
-    alt="Ansible Logo">
-  <div class="DocSiteNav-title">Ansible Sign Documentation</div>
-</a>
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="#" class="icon icon-home">
-            ansible-sign
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <label class="sr-only" for="q">Search docs:</label>
-    <input type="text" class="st-default-search-input" id="q" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-  
-              <ul>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1"><a class="reference internal" href="rundown.html">Rundown (CLI Tutorial)</a></li>
-</ul>
-<!-- extra nav elements for Ansible beyond RTD Sphinx Theme -->
-
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">ansible-sign</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">ansible-sign</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-
-  
-           <div itemprop="articleBody">
-             
-  <section id="ansible-sign">
-<h1>ansible-sign<a class="headerlink" href="#ansible-sign" title="Permalink to this heading"></a></h1>
-<p>This is the documentation for the <strong>ansible-sign</strong> utility used for signing and
-verifying Ansible content.</p>
-<section id="contents">
-<h2>Contents<a class="headerlink" href="#contents" title="Permalink to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
-<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#version-1-0-0">Version 1.0.0</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="rundown.html">Rundown (CLI Tutorial)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="rundown.html#adding-a-gpg-key-to-awx-or-ansible-automation-controller">Adding a GPG key to AWX or Ansible Automation Controller</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rundown.html#how-to-access-the-ansible-sign-cli-utility">How to Access the <code class="docutils literal notranslate"><span class="pre">ansible-sign</span></code> CLI Utility</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rundown.html#the-project-directory">The Project Directory</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rundown.html#signing-content">Signing Content</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rundown.html#verifying-content">Verifying Content</a></li>
-<li class="toctree-l2"><a class="reference internal" href="rundown.html#notes-about-automation">Notes About Automation</a></li>
-</ul>
-</li>
-</ul>
-</div>
-</section>
-<section id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
-</ul>
-</section>
-</section>
-
-
-           </div>
-          </div>
-          
-
-<footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+<body class="indexfile">
+<header>
+    <div class="content">
+        <h1>Coverage report:
+            <span class="pc_cov">92%</span>
+        </h1>
+        <aside id="help_panel_wrapper">
+            <input id="help_panel_state" type="checkbox">
+            <label for="help_panel_state">
+                <img id="keyboard_icon" src="keybd_closed.png" alt="Show/hide keyboard shortcuts" />
+            </label>
+            <div id="help_panel">
+                <p class="legend">Shortcuts on this page</p>
+                <div class="keyhelp">
+                    <p>
+                        <kbd>n</kbd>
+                        <kbd>s</kbd>
+                        <kbd>m</kbd>
+                        <kbd>x</kbd>
+                        <kbd>b</kbd>
+                        <kbd>p</kbd>
+                        <kbd>c</kbd>
+                        &nbsp; change column sorting
+                    </p>
+                    <p>
+                        <kbd>[</kbd>
+                        <kbd>]</kbd>
+                        &nbsp; prev/next file
+                    </p>
+                    <p>
+                        <kbd>?</kbd> &nbsp; show/hide this help
+                    </p>
+                </div>
+            </div>
+        </aside>
+        <form id="filter_container">
+            <input id="filter" type="text" value="" placeholder="filter..." />
+        </form>
+        <p class="text">
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
+            created at 2023-06-09 17:18 +0000
+        </p>
     </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2022, Red Hat, Inc..</p>
-  </div>
-
-  
-   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-  <a href="https://sphinx-ansible-theme.rtfd.io">Sphinx Ansible Theme</a>
-  that is based on the
-  <a href="https://github.com/readthedocs/sphinx_rtd_theme">Read the Docs theme</a>
-  and is maintained by the <a href="https://docs.ansible.com/ansible/4/community/">Ansible Community</a>.
-
-
+</header>
+<main id="index">
+    <table class="index" data-sortable>
+        <thead>
+            <tr class="tablehead" title="Click to sort">
+                <th class="name left" aria-sort="none" data-shortcut="n">Module</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="s">statements</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="m">missing</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="x">excluded</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="b">branches</th>
+                <th aria-sort="none" data-default-sort-order="descending" data-shortcut="p">partial</th>
+                <th class="right" aria-sort="none" data-shortcut="c">coverage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="file">
+                <td class="name left"><a href="d_4483f565be4bc6ed___init___py.html">src/ansible_sign/__init__.py</a></td>
+                <td>6</td>
+                <td>0</td>
+                <td>4</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="6 6">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_a3fda3eac9be077a___init___py.html">src/ansible_sign/checksum/__init__.py</a></td>
+                <td>2</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="2 2">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_a3fda3eac9be077a_base_py.html">src/ansible_sign/checksum/base.py</a></td>
+                <td>81</td>
+                <td>0</td>
+                <td>0</td>
+                <td>32</td>
+                <td>1</td>
+                <td class="right" data-ratio="112 113">99%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_0f7a0620dddb7237___init___py.html">src/ansible_sign/checksum/differ/__init__.py</a></td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="1 1">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_0f7a0620dddb7237_base_py.html">src/ansible_sign/checksum/differ/base.py</a></td>
+                <td>28</td>
+                <td>2</td>
+                <td>0</td>
+                <td>12</td>
+                <td>1</td>
+                <td class="right" data-ratio="37 40">92%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_0f7a0620dddb7237_distlib_manifest_py.html">src/ansible_sign/checksum/differ/distlib_manifest.py</a></td>
+                <td>25</td>
+                <td>0</td>
+                <td>0</td>
+                <td>12</td>
+                <td>0</td>
+                <td class="right" data-ratio="37 37">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_4483f565be4bc6ed_cli_py.html">src/ansible_sign/cli.py</a></td>
+                <td>189</td>
+                <td>17</td>
+                <td>2</td>
+                <td>54</td>
+                <td>12</td>
+                <td class="right" data-ratio="212 243">87%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_9dc633aec8ed261a___init___py.html">src/ansible_sign/signing/__init__.py</a></td>
+                <td>1</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="1 1">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_9dc633aec8ed261a_base_py.html">src/ansible_sign/signing/base.py</a></td>
+                <td>18</td>
+                <td>0</td>
+                <td>2</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="18 18">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_bd17804ca1d80b75___init___py.html">src/ansible_sign/signing/gpg/__init__.py</a></td>
+                <td>2</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td class="right" data-ratio="2 2">100%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_bd17804ca1d80b75_signer_py.html">src/ansible_sign/signing/gpg/signer.py</a></td>
+                <td>26</td>
+                <td>0</td>
+                <td>0</td>
+                <td>10</td>
+                <td>1</td>
+                <td class="right" data-ratio="35 36">97%</td>
+            </tr>
+            <tr class="file">
+                <td class="name left"><a href="d_bd17804ca1d80b75_verifier_py.html">src/ansible_sign/signing/gpg/verifier.py</a></td>
+                <td>33</td>
+                <td>3</td>
+                <td>0</td>
+                <td>10</td>
+                <td>3</td>
+                <td class="right" data-ratio="37 43">86%</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr class="total">
+                <td class="name left">Total</td>
+                <td>412</td>
+                <td>22</td>
+                <td>8</td>
+                <td>130</td>
+                <td>18</td>
+                <td class="right" data-ratio="500 542">92%</td>
+            </tr>
+        </tfoot>
+    </table>
+    <p id="no_rows">
+        No items found using the specified filter.
+    </p>
+</main>
+<footer>
+    <div class="content">
+        <p>
+            <a class="nav" href="https://coverage.readthedocs.io/en/7.2.7">coverage.py v7.2.7</a>,
+            created at 2023-06-09 17:18 +0000
+        </p>
+    </div>
+    <aside class="hidden">
+        <a id="prevFileLink" class="nav" href="d_bd17804ca1d80b75_verifier_py.html"/>
+        <a id="nextFileLink" class="nav" href="d_4483f565be4bc6ed___init___py.html"/>
+        <button type="button" class="button_prev_file" data-shortcut="["/>
+        <button type="button" class="button_next_file" data-shortcut="]"/>
+        <button type="button" class="button_show_hide_help" data-shortcut="?"/>
+    </aside>
 </footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script><!-- extra footer elements for Ansible beyond RTD Sphinx Theme -->
-
 </body>
 </html>

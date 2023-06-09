@@ -1,7 +1,0 @@
-ansible_sign
-============
-
-.. toctree::
-   :maxdepth: 4
-
-   ansible_sign
